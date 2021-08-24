@@ -13,7 +13,7 @@ enum ContentLinesBuilderState {
 }
 
 pub struct ContentLinesBuilder<W: Write> {
-    output: W,
+    pub output: W,
     state: ContentLinesBuilderState,
 }
 
@@ -34,13 +34,13 @@ impl<W: Write> ContentLinesBuilder<W> {
     // this could probably also be done for the iana_tokens by creating a custom class that checks the condition on creation and just wraps a &str
     pub fn write_name(&mut self, name: &str) -> Result<(), Box<dyn Error>> {
         // TODO FIXME depending on if this is user input always check this
-        assert!(IANA_TOKEN_REGEX.is_match(name));
+        //assert!(IANA_TOKEN_REGEX.is_match(name));
         self.output.write_all(name.as_bytes())?;
         Ok(())
     }
 
     pub fn write_param_name(&mut self, param_name: &str) -> Result<(), Box<dyn Error>> {
-        assert!(IANA_TOKEN_REGEX.is_match(param_name));
+        //assert!(IANA_TOKEN_REGEX.is_match(param_name));
         self.output.write_all(b";")?;
         self.output.write_all(param_name.as_bytes())?;
         self.state = ContentLinesBuilderState::Start;
