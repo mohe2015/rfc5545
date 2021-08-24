@@ -12,8 +12,8 @@ enum ContentLinesBuilderState {
     MoreParamValues,
 }
 
-pub struct ContentLinesBuilder {
-    output: Box<dyn Write>,
+pub struct ContentLinesBuilder<W: Write> {
+    output: W,
     state: ContentLinesBuilderState,
 }
 
@@ -22,8 +22,8 @@ lazy_static! {
     static ref IANA_TOKEN_REGEX: Regex = Regex::new("[A-Za-z0-9-]+").unwrap();
 }
 
-impl ContentLinesBuilder {
-    pub fn new(output: Box<dyn Write>) -> Self {
+impl<W: Write> ContentLinesBuilder<W> {
+    pub fn new(output: W) -> Self {
         Self {
             output,
             state: ContentLinesBuilderState::Start,
@@ -73,14 +73,18 @@ impl ContentLinesBuilder {
 
 #[cfg(test)]
 mod tests {
-    use std::error::Error;
+    use std::{error::Error, io::stdout, io::Write};
 
     use super::ContentLinesBuilder;
 
     #[test]
     fn it_works() -> Result<(), Box<dyn Error>> {
-        let mut content_lines_builder = ContentLinesBuilder::new(Box::new(Vec::<u8>::new()));
+        let mut content_lines_builder = ContentLinesBuilder::new(Vec::<u8>::new());
         content_lines_builder.write_name("TEST")?;
+        content_lines_builder.write_param_name("TEST")?;
+        content_lines_builder.write_param_value("TEST")?;
+        content_lines_builder.write_value("TEST")?;
+        stdout().write(&content_lines_builder.output)?;
         Ok(())
     }
 }
