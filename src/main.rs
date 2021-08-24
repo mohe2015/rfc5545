@@ -6,6 +6,7 @@ use rfc5545::content_lines::ContentLinesBuilder;
 fn main() -> Result<(), Box<dyn Error>> {
     let mut stdout = stdout();
     // this also doesnt seem to work as this is technically probably not equal
+    // this could probably work if we instead work with strings directly or so because they wouldn't have strange side-effects
     stdout.write_all(b"HELLOOO")?;
     stdout.write_all(b"WORLD")?;
     Ok(())
