@@ -18,9 +18,9 @@ pub struct ContentLinesBuilder<W: Write> {
 }
 
 // x-name seems to be a subset of iana-token
-lazy_static! {
+/*lazy_static! {
     static ref IANA_TOKEN_REGEX: Regex = Regex::new("[A-Za-z0-9-]+").unwrap();
-}
+}*/
 
 impl<W: Write> ContentLinesBuilder<W> {
     pub fn new(output: W) -> Self {

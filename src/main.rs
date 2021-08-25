@@ -3,13 +3,18 @@ use std::{error::Error, io::{Write, stdout}};
 use rfc5545::content_lines::ContentLinesBuilder;
 
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let mut stdout = stdout();
+fn main() {
+    print!("{}{}{}", "hello", "how", "are");
+
+    /*let stdout = stdout();
+    let mut locked_stdout = stdout.lock();
+
     // this also doesnt seem to work as this is technically probably not equal
     // this could probably work if we instead work with strings directly or so because they wouldn't have strange side-effects
-    stdout.write_all(b"HELLOOO")?;
-    stdout.write_all(b"WORLD")?;
-    Ok(())
+    locked_stdout.write_all(b"HELLOOO")?;
+    locked_stdout.write_all(b"WORLD")?;
+*/
+
     /*let mut content_lines_builder = ContentLinesBuilder::new(stdout());
     content_lines_builder.write_name("TEST")?;
     content_lines_builder.write_param_name("TEST")?;
