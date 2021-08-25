@@ -78,7 +78,9 @@ impl<W: Write> ContentLinesBuilder<W> {
 
 #[cfg(test)]
 mod tests {
-    use std::{error::Error, io::stdout, io::Write};
+    extern crate alloc;
+
+    use std::error::Error;
 
     use alloc::{boxed::Box, vec::Vec};
 
@@ -86,12 +88,12 @@ mod tests {
 
     #[test]
     fn it_works() -> Result<(), Box<dyn Error>> {
-        let mut content_lines_builder = ContentLinesBuilder::new(Vec::<u8>::new());
+        let mut content_lines_builder = ContentLinesBuilder::new(String::new());
         content_lines_builder.write_name("TEST")?;
         content_lines_builder.write_param_name("TEST")?;
         content_lines_builder.write_param_value("TEST")?;
         content_lines_builder.write_value("TEST")?;
-        // content_lines_builder.output
+        assert_eq!("TEST;TEST=TEST:TEST\r\n", content_lines_builder.output);
         Ok(())
     }
 }
