@@ -1,6 +1,11 @@
+extern crate alloc;
+
+use core::fmt::Write;
+use std::error::Error;
+
+use alloc::boxed::Box;
 use lazy_static::lazy_static;
 use regex::Regex;
-use std::{error::Error, io::Write};
 
 // https://datatracker.ietf.org/doc/html/rfc5545#section-3.1
 // ABNF: https://datatracker.ietf.org/doc/html/rfc5234
@@ -35,14 +40,14 @@ impl<W: Write> ContentLinesBuilder<W> {
     pub fn write_name(&mut self, name: &str) -> Result<(), Box<dyn Error>> {
         // TODO FIXME depending on if this is user input always check this
         //assert!(IANA_TOKEN_REGEX.is_match(name));
-        self.output.write_all(name.as_bytes())?;
+        self.output.write_str(name)?;
         Ok(())
     }
 
     pub fn write_param_name(&mut self, param_name: &str) -> Result<(), Box<dyn Error>> {
         //assert!(IANA_TOKEN_REGEX.is_match(param_name));
-        self.output.write_all(b";")?;
-        self.output.write_all(param_name.as_bytes())?;
+        self.output.write_str(";")?;
+        self.output.write_str(param_name)?;
         self.state = ContentLinesBuilderState::Start;
         Ok(())
     }
@@ -51,22 +56,22 @@ impl<W: Write> ContentLinesBuilder<W> {
         // TODO FIXME validate param_value
         match self.state {
             ContentLinesBuilderState::Start => {
-                self.output.write_all(b"=")?;
+                self.output.write_str("=")?;
                 self.state = ContentLinesBuilderState::MoreParamValues;
             }
             ContentLinesBuilderState::MoreParamValues => {
-                self.output.write_all(b",")?;
+                self.output.write_str(",")?;
             }
         };
-        self.output.write_all(param_value.as_bytes())?;
+        self.output.write_str(param_value)?;
         Ok(())
     }
 
     pub fn write_value(&mut self, value: &str) -> Result<(), Box<dyn Error>> {
-        self.output.write_all(b":")?;
+        self.output.write_str(":")?;
         // FIXME validate value
-        self.output.write_all(value.as_bytes())?;
-        self.output.write_all(b"\r\n")?;
+        self.output.write_str(value)?;
+        self.output.write_str("\r\n")?;
         Ok(())
     }
 }
@@ -74,6 +79,8 @@ impl<W: Write> ContentLinesBuilder<W> {
 #[cfg(test)]
 mod tests {
     use std::{error::Error, io::stdout, io::Write};
+
+    use alloc::{boxed::Box, vec::Vec};
 
     use super::ContentLinesBuilder;
 
@@ -84,7 +91,7 @@ mod tests {
         content_lines_builder.write_param_name("TEST")?;
         content_lines_builder.write_param_value("TEST")?;
         content_lines_builder.write_value("TEST")?;
-        stdout().write(&content_lines_builder.output)?;
+        // content_lines_builder.output
         Ok(())
     }
 }
