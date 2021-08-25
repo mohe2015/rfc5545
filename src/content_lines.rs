@@ -1,7 +1,7 @@
 extern crate alloc;
 
 use core::fmt::Write;
-use std::error::Error;
+use std::{error::Error, io::Read};
 
 use alloc::boxed::Box;
 use lazy_static::lazy_static;
@@ -10,7 +10,37 @@ use regex::Regex;
 // https://datatracker.ietf.org/doc/html/rfc5545#section-3.1
 // ABNF: https://datatracker.ietf.org/doc/html/rfc5234
 
-pub struct ContentLinesParser {}
+// TODO maybe use mmap instead? Then most would be memcopies?
+// maybe don't as not always all old data should be kept (e.g. sockets)
+
+enum ContentLinesParserState {
+    Start,
+}
+
+pub struct ContentLinesParser<R: Read> {
+    pub input: R,
+    state: ContentLinesParserState
+}
+
+pub enum ContentLinesParserElement {
+    Name(String),
+    ParamName(String),
+    ParamValue(String),
+    Value(String),
+}
+
+impl<R: Read> ContentLinesParser<R> {
+    pub fn new(input: R) -> Self {
+        Self {
+            input,
+            state: ContentLinesParserState::Start,
+        }
+    }
+
+    pub fn next() -> ContentLinesParserElement {
+        ContentLinesParserElement::Name(String::new())
+    }
+}
 
 enum ContentLinesBuilderState {
     Start,
