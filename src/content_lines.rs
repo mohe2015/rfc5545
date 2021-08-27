@@ -19,7 +19,7 @@ enum ContentLinesParserState {
 
 pub struct ContentLinesParser<R: BufRead> {
     pub input: R,
-    state: ContentLinesParserState
+    _state: ContentLinesParserState
 }
 
 pub enum ContentLinesParserElement {
@@ -33,7 +33,7 @@ impl<R: BufRead> ContentLinesParser<R> {
     pub fn new(input: R) -> Self {
         Self {
             input,
-            state: ContentLinesParserState::Start,
+            _state: ContentLinesParserState::Start,
         }
     }
 
