@@ -1,11 +1,11 @@
 extern crate alloc;
 
 use core::fmt::Write;
-use std::{error::Error, io::{BufRead, Read}};
+use std::{error::Error, io::{BufRead}};
 
 use alloc::boxed::Box;
-use lazy_static::lazy_static;
-use regex::Regex;
+
+
 
 // https://datatracker.ietf.org/doc/html/rfc5545#section-3.1
 // ABNF: https://datatracker.ietf.org/doc/html/rfc5234
@@ -113,7 +113,7 @@ mod tests {
 
     use std::error::Error;
 
-    use alloc::{boxed::Box, vec::Vec};
+    use alloc::{boxed::Box};
 
     use super::ContentLinesBuilder;
 
