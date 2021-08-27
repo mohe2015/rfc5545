@@ -1,7 +1,7 @@
 extern crate alloc;
 
 use core::fmt::Write;
-use std::{error::Error, io::Read};
+use std::{error::Error, io::{BufRead, Read}};
 
 use alloc::boxed::Box;
 use lazy_static::lazy_static;
@@ -17,7 +17,7 @@ enum ContentLinesParserState {
     Start,
 }
 
-pub struct ContentLinesParser<R: Read> {
+pub struct ContentLinesParser<R: BufRead> {
     pub input: R,
     state: ContentLinesParserState
 }
@@ -29,7 +29,7 @@ pub enum ContentLinesParserElement {
     Value(String),
 }
 
-impl<R: Read> ContentLinesParser<R> {
+impl<R: BufRead> ContentLinesParser<R> {
     pub fn new(input: R) -> Self {
         Self {
             input,
@@ -37,7 +37,8 @@ impl<R: Read> ContentLinesParser<R> {
         }
     }
 
-    pub fn next() -> ContentLinesParserElement {
+    pub fn next(&mut self) -> ContentLinesParserElement {
+
         ContentLinesParserElement::Name(String::new())
     }
 }
