@@ -37,7 +37,7 @@ impl<R: BufRead> ContentLinesParser<R> {
         }
     }
 
-    pub fn next(&mut self) -> ContentLinesParserElement {
+    pub fn next_element(&mut self) -> ContentLinesParserElement {
 
         ContentLinesParserElement::Name(String::new())
     }

@@ -5,7 +5,6 @@
 // maybe https://doc.rust-lang.org/reference/const_eval.html
 
 fn main() {
-    print!("{}{}{}", "hello", "how", "are");
 
     /*let stdout = stdout();
     let mut locked_stdout = stdout.lock();
